@@ -1,0 +1,26 @@
+package main
+
+import "C"
+import (
+	"encoding/binary"
+	"encoding/json"
+	"unsafe"
+)
+/* CUSTOM IMPORTS */
+
+/* CODE */
+
+//export PluginWrapper
+func PluginWrapper(fuzzJson *byte, jsonLen int, /* FORMAL PARAMETERS */) uintptr {
+	jsonSlice := unsafe.Slice(fuzzJson, jsonLen)
+	fuzz := new(fuzzTypes.Fuzz)
+	json.Unmarshal(jsonSlice, fuzz)
+	newFuzz := Preprocessor(fuzz, /* ACTUAL PARAMETERS */)
+	newFuzzJson, _ := json.Marshal(newFuzz)
+	ret := make([]byte, len(newFuzzJson)+4)
+	binary.LittleEndian.PutUint32(ret[0:4], uint32(len(newFuzzJson)))
+	copy(ret[4:], newFuzzJson)
+	return uintptr(unsafe.Pointer(&ret[0]))
+}
+
+func main() {}

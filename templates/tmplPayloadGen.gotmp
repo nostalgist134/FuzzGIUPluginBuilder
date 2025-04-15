@@ -1,0 +1,26 @@
+package main
+
+import "C"
+import (
+	"bytes"
+	"encoding/binary"
+	"unsafe"
+)
+
+/* CUSTOM IMPORTS */
+
+/* CODE */
+
+//export PluginWrapper
+func PluginWrapper( /* FORMAL PARAMETERS */ ) uintptr {
+	sSlice := PayloadGenerator( /* ACTUAL PARAMETERS */ )
+	buffer := bytes.Buffer{}
+	binary.Write(&buffer, binary.LittleEndian, int32(len(sSlice))) // string切片的长度
+	for _, s := range sSlice {
+		binary.Write(&buffer, binary.LittleEndian, int32(len(s)))
+		buffer.WriteString(s)
+	}
+	return uintptr(unsafe.Pointer(&buffer.Bytes()[0]))
+}
+
+func main() {}

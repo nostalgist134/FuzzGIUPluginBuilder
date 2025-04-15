@@ -1,0 +1,5 @@
+package main
+
+import "/* MODULE NAME *//components/fuzzTypes"
+
+/* PLUGIN FUNCTION */

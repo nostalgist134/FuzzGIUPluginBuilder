@@ -1,0 +1,21 @@
+package main
+
+import "C"
+import "unsafe"
+/* CUSTOM IMPORTS */
+
+func PayloadGenerator(/* FORMAL PARAMETERS */) []string {
+	/* CODE */
+}
+
+//export PluginWrapper
+func PluginWrapper(/* FORMAL PARAMETERS */) uintptr {
+	sSlice := PayloadGenerator(/* ACTUAL PARAMETERS */)
+	ret := make([]string, 0)
+	for _, s := range sSlice {
+		ret = append(ret, s)
+	}
+	return uintptr(unsafe.Pointer(&ret))
+}
+
+func main() {}

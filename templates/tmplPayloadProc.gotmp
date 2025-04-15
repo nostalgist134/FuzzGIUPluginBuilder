@@ -1,0 +1,17 @@
+package main
+
+import "C"
+import "unsafe"
+/* CUSTOM IMPORTS */
+
+/* CODE */
+
+//export PluginWrapper
+func PluginWrapper(payload string, /* FORMAL PARAMETERS */) uintptr {
+	s := PayloadProcessor(payload, /* ACTUAL PARAMETERS */)
+	ret := make([]string, 0)
+	ret = append(ret, s) // 欺骗编译器，将s分配到堆中
+	return uintptr(unsafe.Pointer(&ret[0]))
+}
+
+func main() {}

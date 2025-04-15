@@ -1,0 +1,26 @@
+package main
+
+import "C"
+import (
+	"encoding/binary"
+	"encoding/json"
+	"unsafe"
+)
+/* CUSTOM IMPORTS */
+
+/* CODE */
+
+//export PluginWrapper
+func PluginWrapper(sendMetaJson *byte, sendMetaJsonLen int) uintptr {
+	sendMetaJsonSlice := unsafe.Slice(sendMetaJson, sendMetaJsonLen)
+	sendMeta := new(fuzzTypes.SendMeta)
+	json.Unmarshal(sendMetaJsonSlice, sendMeta)
+	resp := ReqSender(sendMeta)
+	respJson, _ := json.Marshal(resp)
+	ret := make([]byte, len(respJson)+4)
+	binary.LittleEndian.PutUint32(ret[0:4], uint32(len(respJson)))
+	copy(ret[4:], respJson)
+	return uintptr(unsafe.Pointer(&ret[0]))
+}
+
+func main() {}
