@@ -26,16 +26,16 @@ type (
 		Lines             int            `json:"lines"`
 		HttpRedirectChain string         `json:"http_redirect_chain"`
 		RawResponse       []byte         `json:"raw_response"`
-		RespError         error          `json:"resp_error"` // error位标记在发包过程是否有出错
+		RespError         error          `json:"-"` // error位标记在发包过程是否有出错
 	}
 	// Reaction 响应
 	Reaction struct {
 		Flag   uint32 `json:"flag"` // 响应行为的标志位
 		Output struct {
-			Msg       string `json:"msg"`
-			Overwrite bool   `json:"overwrite"`
+			Msg       string `json:"msg"`       // 输出信息
+			Overwrite bool   `json:"overwrite"` // 输出信息是否覆盖默认输出信息
 		} `json:"output"`
-		NewJob *Fuzz `json:"new_job,omitempty"`
+		NewJob *Fuzz `json:"new_job,omitempty"` // 如果要添加新任务，新任务的结构体
 	}
 	PayloadTemp struct {
 		Generators string   `json:"generators"`
@@ -77,9 +77,10 @@ type (
 			Timeout             int      `json:"timeout"`
 		} `json:"send"` // 发包阶段的设置
 		React struct {
-			Reactors  string `json:"reactors"`  // 使用的自定义响应器
-			Verbosity int    `json:"verbosity"` // 输出详细程度
-			Filter    struct {
+			Reactor     string `json:"reactors"`  // 使用的自定义响应器
+			Verbosity   int    `json:"verbosity"` // 输出详细程度
+			IgnoreError bool   `json:"ignore_error"`
+			Filter      struct {
 				Code  []int  `json:"code"`
 				Lines []int  `json:"lines"`
 				Words []int  `json:"words"`
@@ -114,6 +115,7 @@ type (
 		} `json:"react"` // 响应阶段的设置
 		Misc struct {
 			PoolSize int `json:"pool_size"` // 使用的协程池大小
+			Delay    int `json:"delay"`
 		} `json:"misc"` // 杂项设置
 	}
 )
