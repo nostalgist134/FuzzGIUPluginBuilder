@@ -26,7 +26,7 @@ type (
 		Lines             int            `json:"lines"`
 		HttpRedirectChain string         `json:"http_redirect_chain"`
 		RawResponse       []byte         `json:"raw_response"`
-		RespError         error          `json:"-"` // error位标记在发包过程是否有出错
+		ErrMsg            string         `json:"-"` // error位标记在发包过程是否有出错
 	}
 	// Reaction 响应
 	Reaction struct {
